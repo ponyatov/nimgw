@@ -1,0 +1,55 @@
+CWD     = $(CURDIR)
+MODULE  = $(notdir $(CWD))
+OS     ?= $(shell uname -s)
+
+NOW = $(shell date +%d%m%y)
+REL = $(shell git rev-parse --short=4 HEAD)
+
+NIMBLE = $(HOME)/.nimble/bin/nimble
+NIM    = $(HOME)/.nimble/bin/nim
+
+
+
+.PHONY: all test
+
+all: hello.exe
+
+%.exe: src/%.nim Makefile src/nim.cfg
+	nimble build
+	wine $@
+
+
+
+.PHONY: install
+install: debian $(NIMBLE)
+
+.PHONY: update
+update: debian
+
+.PHONY: debian
+debian:
+	sudo dpkg --add-architecture i386
+	sudo apt update
+	sudo apt install -u `cat apt.txt`
+
+$(NIMBLE):
+	curl https://nim-lang.org/choosenim/init.sh -sSf | sh
+
+
+
+.PHONY: master shadow release
+
+MERGE  = Makefile README.md .gitignore .vscode apt.txt
+MERGE += $(MODULE).nimble src tests
+
+master:
+	git checkout $@
+	git checkout shadow -- $(MERGE)
+
+shadow:
+	git checkout $@
+
+release:
+	git tag $(NOW)-$(REL)
+	git push -v && git push -v --tags
+	git checkout shadow

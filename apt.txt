@@ -1,0 +1,3 @@
+git make build-essential
+gcc-mingw-w64-i686
+wine32:i386
