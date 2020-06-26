@@ -15,6 +15,7 @@ NIM    = $(HOME)/.nimble/bin/nim
 all: hello.exe
 
 %.exe: src/%.nim Makefile src/nim.cfg
+	nimpretty --indent:2 $<
 	nimble build
 	wine $@
 
@@ -44,10 +45,12 @@ MERGE += $(MODULE).nimble src tests
 
 master:
 	git checkout $@
+	git pull -v
 	git checkout shadow -- $(MERGE)
 
 shadow:
 	git checkout $@
+	git pull -v
 
 release:
 	git tag $(NOW)-$(REL)
