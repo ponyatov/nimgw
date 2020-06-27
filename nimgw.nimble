@@ -5,10 +5,11 @@ author        = "Dmitry Ponyatov <dponyatov@gmail.com>"
 description   = "MinGW cross-compiling for Nim /samples/"
 license       = "MIT"
 srcDir        = "src"
-bin           = @["hello"]
+bin           = @["hello"]#,"hellomsg"]
 
 
 
 # Dependencies
 
-requires "nim >= 1.2.2"
+requires "nim >= 1.2.4"
+requires "winim >= 3.3.5"

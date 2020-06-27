@@ -12,11 +12,13 @@ NIM    = $(HOME)/.nimble/bin/nim
 
 .PHONY: all test
 
-all: hello.exe
+all: hellomsg.exe
+# hello.exe 
 
-%.exe: src/%.nim Makefile src/nim.cfg
+%.exe: src/%.nim $(MODULE).nimble Makefile src/nim.cfg
+	rm -rf nimcache
 	nimpretty --indent:2 $<
-	nimble build
+	nimble build && i686-w64-mingw32-objdump -x $@ > $@.objdump
 	wine $@
 
 
